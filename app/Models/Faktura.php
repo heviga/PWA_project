@@ -37,4 +37,8 @@ class Faktura extends Model
     {
         return $this->hasMany(PolozkaFaktury::class, 'IDFaktury', 'IDFaktury');
     }
+    public function odberatel()
+    {
+        return $this->belongsTo(Odberatel::class, 'IDOdberatela', 'IDOdberatela');
+    }
 }
