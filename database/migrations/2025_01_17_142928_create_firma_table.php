@@ -28,7 +28,7 @@ return new class extends Migration
             $table->text('Mesto')->charset('utf8mb4')->collation('utf8mb4_slovak_ci');
             $table->text('Krajina')->charset('utf8mb4')->collation('utf8mb4_slovak_ci');
             $table->unsignedBigInteger('IDPouzivatela');
-            //$table->foreign('IDPouzivatela')->references('IDPouzivatela')->on('pouzivatel')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('IDPouzivatela')->references('IDPouzivatela')->on('pouzivatel')->onDelete('restrict')->onUpdate('restrict');
             $table->timestamps();
         });
     }

@@ -31,7 +31,7 @@ class Firma extends Model
     ];
 
 
-/*
+
    // Relationships
    public function pouzivatel()
    {
@@ -43,6 +43,6 @@ class Firma extends Model
        return $this->hasMany(Faktura::class, 'IDFirmy', 'IDFirmy');
    }
 
-   */
+   
 }
 

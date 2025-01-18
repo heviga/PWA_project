@@ -31,7 +31,7 @@ class FirmaFactory extends Factory
             'PSC' => $this->faker->postcode(),
             'Mesto' => $this->faker->city(),
             'Krajina' => $this->faker->country(),
-            //'IDPouzivatela' => \App\Models\Pouzivatel::factory(), // Link to a Pouzivatel
+            'IDPouzivatela' => \App\Models\Pouzivatel::factory(), // Link to a Pouzivatel
         ];
     }
 }
