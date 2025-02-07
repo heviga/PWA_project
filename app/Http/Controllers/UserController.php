@@ -7,7 +7,12 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller {
     public function index() {
-        return User::all();
+        $users = User::all();
+        return view('users.index', compact('users'));
+    }
+
+    public function create() {
+        return view('users.create');
     }
 
     public function store(Request $request) {
@@ -16,23 +21,42 @@ class UserController extends Controller {
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
-            'phone' => 'nullable|string|max:255',
+            'phone' => 'nullable|string',
         ]);
-        $validatedData['password'] = bcrypt($validatedData['password']);
-        return User::create($validatedData);
+
+        $validatedData['password'] = bcrypt($validatedData['password']); // Hash password
+
+        User::create($validatedData);
+
+        return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
-    public function show(User $user) {
-        return $user;
+    public function edit(User $user) {
+        return view('users.edit', compact('user'));
     }
 
     public function update(Request $request, User $user) {
-        $user->update($request->all());
-        return $user;
+        $validatedData = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+            'phone' => 'nullable|string',
+        ]);
+
+        if ($request->filled('password')) {
+            $validatedData['password'] = bcrypt($validatedData['password']); // Hash password
+        } else {
+            unset($validatedData['password']);
+        }
+
+        $user->update($validatedData);
+
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy(User $user) {
         $user->delete();
-        return response()->noContent();
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }

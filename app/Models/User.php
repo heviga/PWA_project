@@ -15,6 +15,11 @@ class User extends Authenticatable {
         'phone',
     ];
 
+    protected $hidden = [
+        'password', // Hide the password field from serialization
+        'remember_token',
+    ];
+
     // A user can have many companies
     public function companies() {
         return $this->hasMany(Company::class);

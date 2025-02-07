@@ -10,13 +10,22 @@ class InvoiceItem extends Model {
 
     protected $fillable = [
         'invoice_id',
-        'name',
+        'item_name',
         'quantity',
         'unit_price',
     ];
 
-    // An invoice item belongs to an invoice
     public function invoice() {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function getTotalPriceAttribute() {
+        return $this->quantity * $this->unit_price;
+    }
+
+    public function getTotalPriceWithVatAttribute() {
+        // VAT 20%, 
+        $vatRate = 0.20;
+        return $this->getTotalPriceAttribute() * (1 + $vatRate);
     }
 }

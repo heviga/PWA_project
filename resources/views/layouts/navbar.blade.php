@@ -11,20 +11,12 @@
                         Dashboard
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Authors</a></li>
-                        <li><a class="dropdown-item" href="#">Users</a></li>
-                        <li><a class="dropdown-item" href="#">Books</a></li>
-                        <li><a class="dropdown-item" href="#">Printouts</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Genres</a></li>
+                    <li><a href="{{ route('home') }}">Home</a></li>
+                    <li><a href="{{ route('companies.index') }}">Companies</a></li>
+                    <li><a href="{{ route('invoices.index') }}">Invoices</a></li>
+                    <li><a href="{{ route('customers.index') }}">Customers</a></li>
+                    <li><a href="{{ route('login') }}">Login</a></li>
                     </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Loans</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">List of Books</a>
-                </li>
             </ul>
         </div>
     </div>

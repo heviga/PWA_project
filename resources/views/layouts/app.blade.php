@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Laravel Project')</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+</head>
+<body>
+@include('navbar')
+
+
+    <main>
+        @yield('content')
+    </main>
+</body>
+</html>
+
+
+
+
+
+
+<!-- 
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,20 +36,20 @@
 </head>
 <body>
 
-<!-- Navbar -->
-@include('layouts.navbar')
-<!-- End of Navbar -->
+Navbar -->
+<!-- /*@include('layouts.navbar')
+ --><!-- End of Navbar -->
 
-<div class="container">
-<!-- Page Content -->   
-@yield('content')
-<!-- End of Page Content -->
-</div>
+<!-- <div class="container">
+Page Content -->   
+<!-- @yield('content')
+ --><!-- End of Page Content -->
+<!-- </div>  -->
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
 <script src="/js/custom.js"></script>
     
 </body>
-</html>
+</html>   -->

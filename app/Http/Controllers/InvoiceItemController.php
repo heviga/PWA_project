@@ -3,34 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Models\InvoiceItem;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 
 class InvoiceItemController extends Controller {
     public function index() {
-        return InvoiceItem::all();
+        $invoiceItems = InvoiceItem::all();
+        return view('invoice_items.index', compact('invoiceItems'));
+    }
+
+    public function create() {
+        $invoices = Invoice::all();
+        return view('invoice_items.create', compact('invoices'));
     }
 
     public function store(Request $request) {
         $validatedData = $request->validate([
             'invoice_id' => 'required|exists:invoices,id',
-            'name' => 'required|string|max:255',
-            'quantity' => 'required|integer',
-            'unit_price' => 'required|numeric',
+            'item_name' => 'required|string|max:255', // ✅ Updated
+            'quantity' => 'required|integer|min:1',
+            'unit_price' => 'required|numeric|min:0',
         ]);
-        return InvoiceItem::create($validatedData);
+
+        InvoiceItem::create($validatedData);
+
+        return redirect()->route('invoice_items.index')->with('success', 'Invoice item added successfully.');
     }
 
-    public function show(InvoiceItem $invoiceItem) {
-        return $invoiceItem;
+    public function edit(InvoiceItem $invoiceItem) {
+        return view('invoice_items.edit', compact('invoiceItem'));
     }
 
     public function update(Request $request, InvoiceItem $invoiceItem) {
-        $invoiceItem->update($request->all());
-        return $invoiceItem;
+        $validatedData = $request->validate([
+            'invoice_id' => 'required|exists:invoices,id',
+            'item_name' => 'required|string|max:255', // ✅ Updated
+            'quantity' => 'required|integer|min:1',
+            'unit_price' => 'required|numeric|min:0',
+        ]);
+
+        $invoiceItem->update($validatedData);
+
+        return redirect()->route('invoice_items.index')->with('success', 'Invoice item updated successfully.');
     }
 
     public function destroy(InvoiceItem $invoiceItem) {
         $invoiceItem->delete();
-        return response()->noContent();
+        return redirect()->route('invoice_items.index')->with('success', 'Invoice item deleted successfully.');
     }
 }

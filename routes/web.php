@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\InvoiceItemController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,9 +18,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index'); // return view('welcome');
-});
+    return view('welcome');
+})->name('welcome');
 
-Route::get('/index', function () {
-    return view('index');
-})->name('index');
+
+Route::resource('companies', CompanyController::class);
+Route::resource('invoices', InvoiceController::class);
+Route::resource('customers', CustomerController::class);
+Route::resource('users', UserController::class);
+
+
+Route::resource('invoice_items', InvoiceItemController::class);
