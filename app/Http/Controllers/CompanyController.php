@@ -13,6 +13,11 @@ class CompanyController extends Controller {
     public function create() {
         return view('companies.create');
     }
+    // Show company details and invoices
+    public function show(Company $company)
+    {
+        return view('companies.show', compact('company'));
+    }
 
     public function store(Request $request) {
         $validatedData = $request->validate([

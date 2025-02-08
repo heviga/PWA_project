@@ -55,4 +55,24 @@ class InvoiceController extends Controller {
         $invoice->delete();
         return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully.');
     }
+    public function generatePdf(Company $company)
+    {
+        // Fetch invoices grouped by year
+        $invoices = Invoice::where('company_id', $company->id)
+            ->orderBy('issue_date', 'asc')
+            ->get()
+            ->groupBy(function($invoice) {
+                return \Carbon\Carbon::parse($invoice->issue_date)->format('Y');
+            });
+
+        // Prepare total per year
+        $totals = [];
+        foreach ($invoices as $year => $yearInvoices) {
+            $totals[$year] = $yearInvoices->sum('total_amount');
+        }
+
+        // Generate PDF
+        $pdf = Pdf::loadView('pdf.invoices', compact('company', 'invoices', 'totals'));
+        return $pdf->download("Invoices_{$company->name}.pdf");
+    }
 }
