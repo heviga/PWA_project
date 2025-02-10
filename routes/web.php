@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Company-related routes
 Route::middleware('auth')->group(function () {
+    Route::get('/companies/{company}/export-pdf', [CompanyController::class, 'exportPDF'])->name('companies.export-pdf');
     Route::resource('companies', CompanyController::class);
     Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
     Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create'); 

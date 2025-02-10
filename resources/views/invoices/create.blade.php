@@ -20,12 +20,19 @@
 
             <div class="mb-3">
                 <label for="company_id" class="form-label">Select Company</label>
-                <select class="form-control" id="company_id" name="company_id" required>
-                    <option value="">Select Company</option>
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->name }}</option>
-                    @endforeach
+                <select class="form-control" id="company_id" name="company_id" required {{ isset($selectedCompany) ? 'disabled' : '' }}>
+                    @if(isset($selectedCompany))
+                        <option value="{{ $selectedCompany->id }}" selected>{{ $selectedCompany->name }}</option>
+                    @else
+                        <option value="">Select Company</option>
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                        @endforeach
+                    @endif
                 </select>
+                @if(isset($selectedCompany))
+                    <input type="hidden" name="company_id" value="{{ $selectedCompany->id }}">
+                @endif
             </div>
 
             <div class="mb-3">

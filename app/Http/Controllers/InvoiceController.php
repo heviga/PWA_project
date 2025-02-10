@@ -5,18 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Company;
 use App\Models\Customer;
+use PDF;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller {
-    public function index() {
-        $invoices = Invoice::all();
-        return view('invoices.index', compact('invoices'));
+    public function index()
+{
+    $companies = Company::with('invoices.customer')->get();
+    return view('invoices.index', compact('companies'));
+}
+
+    public function create(Request $request)
+    {
+    $selectedCompany = null;
+
+    if ($request->has('company_id')) {
+        $selectedCompany = Company::findOrFail($request->company_id);
     }
 
-    public function create() {
-        $companies = Company::all(); // Získa všetky spoločnosti
-        $customers = Customer::all(); // Získa všetkých zákazníkov
-        return view('invoices.create', compact('companies', 'customers')); // Odovzdáme obidve premenné
+    return view('invoices.create', [
+        'companies' => Company::all(),
+        'customers' => Customer::all(),
+        'selectedCompany' => $selectedCompany,
+    ]);
     }
 
     public function store(Request $request) {
@@ -68,24 +79,22 @@ class InvoiceController extends Controller {
         return redirect()->route('invoices.index')->with('success', 'Invoice permanently deleted.');
     }
 
-    public function generatePdf(Company $company)
+    public function generateAllInvoicesPdf(Company $company)
     {
-        // Fetch invoices grouped by year
-        $invoices = Invoice::where('company_id', $company->id)
-            ->orderBy('issue_date', 'asc')
-            ->get()
-            ->groupBy(function($invoice) {
-                return \Carbon\Carbon::parse($invoice->issue_date)->format('Y');
-            });
+        // Získame všetky faktúry firmy
+        $invoices = $company->invoices->sortBy('issue_date'); // Zoradenie podľa dátumu vystavenia faktúry
 
-        // Prepare total per year
-        $totals = [];
-        foreach ($invoices as $year => $yearInvoices) {
-            $totals[$year] = $yearInvoices->sum('total_amount');
+        // Rozdelenie faktúr po rokoch
+        $invoicesByYear = [];
+        foreach ($invoices as $invoice) {
+            $year = $invoice->issue_date->year;
+            $invoicesByYear[$year][] = $invoice;
         }
 
-        // Generate PDF
-        $pdf = Pdf::loadView('pdf.invoices', compact('company', 'invoices', 'totals'));
-        return $pdf->download("Invoices_{$company->name}.pdf");
+        // Generovanie PDF
+        $pdf = PDF::loadView('invoices.yearly_invoices_pdf', compact('company', 'invoicesByYear'));
+
+        // Stiahnutie PDF
+        return $pdf->download('invoices_' . $company->name . '.pdf');
     }
 }

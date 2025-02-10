@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 /* use App\Http\Controllers\Auth\Request; */
 use App\Models\Company;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Import Auth
-
+use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\Carbon;
 
 class CompanyController extends Controller
 {
@@ -142,4 +144,24 @@ class CompanyController extends Controller
             return back()->withErrors(['error' => 'Failed to delete company: ' . $e->getMessage()]);
         }
     }
+    
+    public function exportPDF($companyId)
+    {
+        // Získame všetky faktúry pre danú firmu
+        $invoices = Invoice::where('company_id', $companyId)->get();
+
+        // Nájdeme firmu podľa ID
+        $company = Company::find($companyId);
+
+        // Príprava dát pre PDF
+        $array = ['title' => 'invoices.list_of_invoices'];
+        $data = compact('invoices', 'company', 'array');
+
+        // Generovanie PDF
+        $pdf = PDF::loadView('pdfs.invoice', $data);
+
+        // Generovanie a streamovanie PDF
+        return $pdf->stream('invoices_'.$company->name.'.pdf');
+    }
+
 }
