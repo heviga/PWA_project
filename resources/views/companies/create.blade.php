@@ -7,14 +7,16 @@
         <div class="card shadow p-4">
             <form method="POST" action="{{ route('companies.store') }}">
                 @csrf
-                <!-- Mandatory Fields -->
+
+                <!-- Company Name -->
                 <div class="mb-3">
-                    <label for="name" class="form-label">Company Name (Názov)</label>
+                    <label for="name" class="form-label">Company Name</label>
                     <input type="text" class="form-control" id="name" name="name" required>
                 </div>
 
+                <!-- Type -->
                 <div class="mb-3">
-                    <label for="type" class="form-label">Type (Typ)</label>
+                    <label for="type" class="form-label">Type</label>
                     <select class="form-control" id="type" name="type" required>
                         <option value="as">AS</option>
                         <option value="sro">SRO</option>
@@ -22,28 +24,48 @@
                     </select>
                 </div>
 
+                <!-- ICO (Unique Identifier) -->
                 <div class="mb-3">
-                    <label for="ico" class="form-label">ICO</label>
-                    <input type="text" class="form-control" id="ico_companies" name="ico_companie" required>
+                    <label for="ico_companies" class="form-label">ICO</label>
+                    <input type="text" class="form-control" id="ico_companies" name="ico_companies" required>
                 </div>
 
+                <!-- DIC -->
                 <div class="mb-3">
-                    <label for="dic" class="form-label">DIC</label>
+                    <label for="dic_companies" class="form-label">DIC</label>
                     <input type="text" class="form-control" id="dic_companies" name="dic_companies" required>
                 </div>
 
+                <!-- Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" required>
                 </div>
 
+                <!-- Address Fields -->
                 <div class="mb-3">
-                    <label for="address" class="form-label">Address (Adresa)</label>
-                    <input type="text" class="form-control" id="address" name="address" placeholder="Street, ZIP code, City, Country" required>
+                    <label for="street" class="form-label">Street</label>
+                    <input type="text" class="form-control" id="street" name="street" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="bank" class="form-label">Bank</label>
+                    <label for="postal_code" class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" id="postal_code" name="postal_code" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" name="city" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="country" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="country" name="country" required>
+                </div>
+
+                <!-- Bank Details -->
+                <div class="mb-3">
+                    <label for="bank_name" class="form-label">Bank Name</label>
                     <input type="text" class="form-control" id="bank_name" name="bank_name" required>
                 </div>
 
@@ -58,24 +80,22 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="account_number" class="form-label">Account Number (Číslo účtu)</label>
+                    <label for="account_number" class="form-label">Account Number</label>
                     <input type="text" class="form-control" id="account_number" name="account_number" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="bank_code" class="form-label">Bank Code (Kód banky)</label>
+                    <label for="bank_code" class="form-label">Bank Code</label>
                     <input type="text" class="form-control" id="bank_code" name="bank_code" required>
                 </div>
 
-                <!-- Optional Fields -->
-                <h5 class="mt-4">Optional Information</h5>
-
+                <!-- Optional Phone Number -->
                 <div class="mb-3">
-                    <label for="phone" class="form-label">Phone (Telefón)</label>
+                    <label for="phone" class="form-label">Phone (Optional)</label>
                     <input type="text" class="form-control" id="phone" name="phone">
                 </div>
 
-
+                <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary">Register Company</button>
             </form>
         </div>

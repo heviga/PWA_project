@@ -44,19 +44,18 @@ class LoginController extends Controller
 }
 
 
+
 public function login(Request $request)
 {
-    $credentials = $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
-    ]);
+    Log::info('Login Attempt:', ['email' => $request->email]);
 
-    if (Auth::attempt($credentials)) {
-        return redirect()->intended('/companies'); // Redirect after login
+    if (Auth::attempt($request->only('email', 'password'))) {
+        Log::info('Login Success:', ['email' => $request->email]);
+        return redirect()->route('dashboard');
+    } else {
+        Log::error('Login Failed:', ['email' => $request->email]);
+        return back()->withErrors(['error' => 'Invalid login credentials.']);
     }
-
-    return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
-    ]);
 }
+
 }

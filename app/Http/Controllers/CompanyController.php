@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+/* use App\Http\Controllers\Auth\Request; */
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Import Auth
+
 
 class CompanyController extends Controller
 {
@@ -60,7 +61,7 @@ class CompanyController extends Controller
     
         try {
             // ✅ Save the company
-            $company = Company::create($validatedData);
+            Company::create($validatedData);
     
             return redirect()->route('companies.index')->with('success', 'Company created successfully.');
         } catch (\Exception $e) {
