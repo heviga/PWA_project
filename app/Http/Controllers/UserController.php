@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller {
     public function index() {
@@ -26,9 +28,15 @@ class UserController extends Controller {
 
         $validatedData['password'] = bcrypt($validatedData['password']); // Hash password
 
-        User::create($validatedData);
+        User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password), // Hashing the password
+            'phone' => $request->phone,
+        ]);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('users.index')->with('success', 'User added successfully!');
     }
 
     public function edit(User $user) {

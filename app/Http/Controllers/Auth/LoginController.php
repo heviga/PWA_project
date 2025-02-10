@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/companies';
 
     /**
      * Create a new controller instance.
@@ -37,4 +37,21 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
+    protected function authenticated(Request $request, $user)
+{
+    return redirect()->route('companies.index');
+}
+
+
+    public function login(Request $request)
+    {
+        Log::info($request->all()); // Log the request data (except the password for security)
+    
+        // Attempt login
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return redirect()->intended('companies');
+        }
+    
+        return back()->withErrors(['email' => 'Invalid credentials.']);
+    } 
 }
