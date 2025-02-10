@@ -34,34 +34,40 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        \Log::info('Company Data Received:', $request->all());
+    
+        // Validate all fields (only phone is nullable)
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:as,sro,szčo',
             'ico_companies' => 'required|string|max:20|unique:companies,ico_companies',
-            'dic_companies' => 'nullable|string|max:20',
+            'dic_companies' => 'required|string|max:20',
             'email' => 'required|email|unique:companies,email',
-            'bank_name' => 'nullable|string|max:255',
-            'swift' => 'nullable|string|max:20',
-            'iban' => 'nullable|string|max:50',
-            'account_number' => 'nullable|string|max:20',
-            'bank_code' => 'nullable|string|max:20',
-            'street' => 'nullable|string',
-            'postal_code' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'swift' => 'required|string|max:20',
+            'iban' => 'required|string|max:50',
+            'account_number' => 'required|string|max:20',
+            'bank_code' => 'required|string|max:20',
+            'street' => 'required|string',
+            'postal_code' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20', // ✅ Only phone is nullable
         ]);
-
-        // Assign the user_id automatically
+    
+        // ✅ Automatically assign the user_id
         $validatedData['user_id'] = Auth::id();
-
-        // Save the company
+    
         try {
+            // ✅ Save the company
             $company = Company::create($validatedData);
+    
             return redirect()->route('companies.index')->with('success', 'Company created successfully.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Failed to create company: ' . $e->getMessage()]);
         }
     }
+    
 
     /**
      * Display the specified company details.
@@ -91,24 +97,25 @@ class CompanyController extends Controller
         if (Auth::id() !== $company->user_id) {
             return redirect()->route('companies.index')->with('error', 'Unauthorized access.');
         }
-
+    
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:as,sro,szčo',
             'ico_companies' => 'required|string|max:20|unique:companies,ico_companies,' . $company->id,
-            'dic_companies' => 'nullable|string|max:20',
+            'dic_companies' => 'required|string|max:20',
             'email' => 'required|email|unique:companies,email,' . $company->id,
-            'bank_name' => 'nullable|string|max:255',
-            'swift' => 'nullable|string|max:20',
-            'iban' => 'nullable|string|max:50',
-            'account_number' => 'nullable|string|max:20',
-            'bank_code' => 'nullable|string|max:20',
-            'street' => 'nullable|string',
-            'postal_code' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'swift' => 'required|string|max:20',
+            'iban' => 'required|string|max:50',
+            'account_number' => 'required|string|max:20',
+            'bank_code' => 'required|string|max:20',
+            'street' => 'required|string',
+            'postal_code' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20', //  Only phone is nullable
         ]);
-
+    
         try {
             $company->update($validatedData);
             return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
@@ -116,6 +123,7 @@ class CompanyController extends Controller
             return back()->withErrors(['error' => 'Failed to update company: ' . $e->getMessage()]);
         }
     }
+    
 
     /**
      * Delete a company.

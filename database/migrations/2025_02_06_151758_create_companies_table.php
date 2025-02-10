@@ -27,10 +27,12 @@ return new class extends Migration
             $table->string('postal_code');
             $table->string('city');
             $table->string('country');
+            $table->string('phone')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->timestamps();
+            
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

@@ -24,12 +24,12 @@
 
                 <div class="mb-3">
                     <label for="ico" class="form-label">ICO</label>
-                    <input type="text" class="form-control" id="ico" name="ico" required>
+                    <input type="text" class="form-control" id="ico_companies" name="ico_companie" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="dic" class="form-label">DIC</label>
-                    <input type="text" class="form-control" id="dic" name="dic" required>
+                    <input type="text" class="form-control" id="dic_companies" name="dic_companies" required>
                 </div>
 
                 <div class="mb-3">
@@ -44,7 +44,7 @@
 
                 <div class="mb-3">
                     <label for="bank" class="form-label">Bank</label>
-                    <input type="text" class="form-control" id="bank" name="bank" required>
+                    <input type="text" class="form-control" id="bank_name" name="bank_name" required>
                 </div>
 
                 <div class="mb-3">

@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/create', function () {
         return view('companies.create');
     })->name('companies.create');
-    Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
+    Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store')->middleware('auth');
     Route::get('/companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
 });
 
