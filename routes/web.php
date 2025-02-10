@@ -59,6 +59,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/companies/{company}/invoices/pdf', [InvoiceController::class, 'generatePdf'])->name('invoices.pdf');
     Route::resource('invoices', InvoiceController::class);
+    Route::post('invoices/{invoice}/delete', [InvoiceController::class, 'delete'])->name('invoices.delete');
+    Route::delete('invoices/{invoice}/forceDelete', [InvoiceController::class, 'forceDelete'])->name('invoices.forceDelete');
 });
 
 // Customer-related routes

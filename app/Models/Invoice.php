@@ -17,7 +17,7 @@ class Invoice extends Model {
         'due_date',
         'delivery_date',
     ];
-
+    protected $dates = ['issue_date', 'due_date', 'delivery_date'];
     // An invoice belongs to a company
     public function company() {
         return $this->belongsTo(Company::class);

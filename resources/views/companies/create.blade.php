@@ -5,8 +5,16 @@
         <h1 class="text-center mb-4">Register a New Company</h1>
 
         <div class="card shadow p-4">
+    @if($errors->any())
+        @foreach($errors->all() as $error)
+            {{ $error }} <br>
+        @endforeach
+    @endif
             <form method="POST" action="{{ route('companies.store') }}">
                 @csrf
+
+                <input style="display: none;" type="text" id="user_id" name="user_id" value="{{ Auth::user()->id }}" required>
+
                 <!-- Mandatory Fields -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Company Name (Názov)</label>
@@ -23,13 +31,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="ico" class="form-label">ICO</label>
-                    <input type="text" class="form-control" id="ico" name="ico" required>
+                    <label for="ico_companies" class="form-label">ICO</label>
+                    <input type="text" class="form-control" id="ico_companies" name="ico_companies" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="dic" class="form-label">DIC</label>
-                    <input type="text" class="form-control" id="dic" name="dic" required>
+                    <label for="dic_companies" class="form-label">DIC</label>
+                    <input type="text" class="form-control" id="dic_companies" name="dic_companies" required>
                 </div>
 
                 <div class="mb-3">

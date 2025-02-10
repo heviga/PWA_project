@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Company;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller {
@@ -12,7 +14,9 @@ class InvoiceController extends Controller {
     }
 
     public function create() {
-        return view('invoices.create');
+        $companies = Company::all(); // Získa všetky spoločnosti
+        $customers = Customer::all(); // Získa všetkých zákazníkov
+        return view('invoices.create', compact('companies', 'customers')); // Odovzdáme obidve premenné
     }
 
     public function store(Request $request) {
@@ -32,7 +36,9 @@ class InvoiceController extends Controller {
     }
 
     public function edit(Invoice $invoice) {
-        return view('invoices.edit', compact('invoice'));
+        $companies = Company::all();
+        $customers = Customer::all();
+        return view('invoices.edit', compact('invoice', 'companies', 'customers'));
     }
 
     public function update(Request $request, Invoice $invoice) {
@@ -55,6 +61,13 @@ class InvoiceController extends Controller {
         $invoice->delete();
         return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully.');
     }
+
+    public function forceDelete(Invoice $invoice) {
+        // Trvalé vymazanie faktúry
+        $invoice->forceDelete();
+        return redirect()->route('invoices.index')->with('success', 'Invoice permanently deleted.');
+    }
+
     public function generatePdf(Company $company)
     {
         // Fetch invoices grouped by year
