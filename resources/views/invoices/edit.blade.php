@@ -69,8 +69,50 @@
                     <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="{{ old('delivery_date', \Carbon\Carbon::parse($invoice->delivery_date)->format('Y-m-d')) }}" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update Invoice</button>
+                <hr>
+
+                <!-- Položky faktúry -->
+                <h4>Invoice Items</h4>
+                <div id="invoice-items-container">
+                    @foreach ($invoice->invoiceItems as $index => $item)
+                        <div class="invoice-item mb-3">
+                            <input type="text" name="invoice_items[{{ $index }}][item_name]" class="form-control mb-2" placeholder="Item Name" value="{{ old("invoice_items.{$index}.item_name", $item->item_name) }}" required>
+                            <input type="number" name="invoice_items[{{ $index }}][quantity]" class="form-control mb-2" placeholder="Quantity" value="{{ old("invoice_items.{$index}.quantity", $item->quantity) }}" required>
+                            <input type="number" name="invoice_items[{{ $index }}][unit_price]" class="form-control" placeholder="Unit Price" step="0.01" value="{{ old("invoice_items.{$index}.unit_price", $item->unit_price) }}" required>
+                        </div>
+                    @endforeach
+                </div>
+
+                <button type="button" id="add-item-btn" class="btn btn-secondary mt-2">Add Item</button>
+
+                <hr>
+                <button type="submit" class="btn btn-primary mt-3">Update Invoice</button>
             </form>
         </div>
     </div>
+
+    <script>
+        let itemCount = {{ $invoice->invoiceItems->count() }};
+        const maxItems = 5;
+
+        document.getElementById('add-item-btn').addEventListener('click', function () {
+            if (itemCount >= maxItems) {
+                alert('You can only add up to 5 items.');
+                return;
+            }
+
+            const container = document.getElementById('invoice-items-container');
+            const newItem = document.createElement('div');
+            newItem.classList.add('invoice-item', 'mb-3');
+
+            newItem.innerHTML = `
+                <input type="text" name="invoice_items[${itemCount}][item_name]" class="form-control mb-2" placeholder="Item Name" required>
+                <input type="number" name="invoice_items[${itemCount}][quantity]" class="form-control mb-2" placeholder="Quantity" required>
+                <input type="number" name="invoice_items[${itemCount}][unit_price]" class="form-control" placeholder="Unit Price" step="0.01" required>
+            `;
+
+            container.appendChild(newItem);
+            itemCount++;
+        });
+    </script>
 @endsection

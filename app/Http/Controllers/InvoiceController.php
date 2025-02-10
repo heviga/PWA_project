@@ -39,10 +39,18 @@ class InvoiceController extends Controller {
             'issue_date' => 'required|date',
             'due_date' => 'required|date|after_or_equal:issue_date',
             'delivery_date' => 'required|date',
+            'invoice_items.*.item_name' => 'required|string',
+            'invoice_items.*.quantity' => 'required|numeric|min:1',
+            'invoice_items.*.unit_price' => 'required|numeric|min:0',
         ]);
-
-        Invoice::create($validatedData);
-
+    
+        $invoice = Invoice::create($validatedData);
+    
+        // Uloženie položiek faktúry
+        foreach ($validatedData['invoice_items'] as $itemData) {
+            $invoice->invoiceItems()->create($itemData);
+        }
+    
         return redirect()->route('invoices.index')->with('success', 'Invoice created successfully.');
     }
 

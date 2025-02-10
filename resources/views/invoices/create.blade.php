@@ -74,8 +74,48 @@
                 <input type="date" class="form-control" id="delivery_date" name="delivery_date" required>
             </div>
 
-            <button type="submit" class="btn btn-primary">Save Invoice</button>
+            <hr>
+
+            <!-- Položky faktúry -->
+            <h4>Invoice Items</h4>
+            <div id="invoice-items-container">
+                <div class="invoice-item mb-3">
+                    <input type="text" name="invoice_items[0][item_name]" class="form-control mb-2" placeholder="Item Name" required>
+                    <input type="number" name="invoice_items[0][quantity]" class="form-control mb-2" placeholder="Quantity" required>
+                    <input type="number" name="invoice_items[0][unit_price]" class="form-control" placeholder="Unit Price" step="0.01" required>
+                </div>
+            </div>
+
+            <button type="button" id="add-item-btn" class="btn btn-secondary mt-2">Add Item</button>
+
+            <hr>
+            <button type="submit" class="btn btn-primary mt-3">Save Invoice</button>
         </form>
     </div>
 </div>
+
+<script>
+    let itemCount = 1;
+    const maxItems = 5;
+
+    document.getElementById('add-item-btn').addEventListener('click', function () {
+        if (itemCount >= maxItems) {
+            alert('You can only add up to 5 items.');
+            return;
+        }
+
+        const container = document.getElementById('invoice-items-container');
+        const newItem = document.createElement('div');
+        newItem.classList.add('invoice-item', 'mb-3');
+
+        newItem.innerHTML = `
+            <input type="text" name="invoice_items[${itemCount}][item_name]" class="form-control mb-2" placeholder="Item Name" required>
+            <input type="number" name="invoice_items[${itemCount}][quantity]" class="form-control mb-2" placeholder="Quantity" required>
+            <input type="number" name="invoice_items[${itemCount}][unit_price]" class="form-control" placeholder="Unit Price" step="0.01" required>
+        `;
+
+        container.appendChild(newItem);
+        itemCount++;
+    });
+</script>
 @endsection
