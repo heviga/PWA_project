@@ -13,24 +13,26 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->collation('utf8mb4_slovak_ci');
-            $table->enum('type', ['as', 'sro', 'szčo'])->collation('utf8mb4_slovak_ci');
-            $table->string('ico_companies', 20)->collation('utf8mb4_slovak_ci');
-            $table->string('dic_companies', 20)->collation('utf8mb4_slovak_ci');
-            $table->string('email')->collation('utf8mb4_slovak_ci');
-            $table->string('bank_name')->collation('utf8mb4_slovak_ci');
-            $table->string('swift', 20)->collation('utf8mb4_slovak_ci');
-            $table->string('iban', 50)->collation('utf8mb4_slovak_ci');
-            $table->string('account_number', 20)->collation('utf8mb4_slovak_ci');
-            $table->string('bank_code', 20)->collation('utf8mb4_slovak_ci');
-            $table->text('street')->collation('utf8mb4_slovak_ci');
-            $table->string('postal_code')->collation('utf8mb4_slovak_ci');
-            $table->string('city')->collation('utf8mb4_slovak_ci');
-            $table->string('country')->collation('utf8mb4_slovak_ci');
+            $table->string('name');
+            $table->enum('type', ['as', 'sro', 'szčo']);
+            $table->string('ico_companies', 20);
+            $table->string('dic_companies', 20);
+            $table->string('email');
+            $table->string('bank_name');
+            $table->string('swift', 20);
+            $table->string('iban', 50);
+            $table->string('account_number', 20);
+            $table->string('bank_code', 20);
+            $table->text('street');
+            $table->string('postal_code');
+            $table->string('city');
+            $table->string('country');
+            $table->string('phone')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->timestamps();
+            
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

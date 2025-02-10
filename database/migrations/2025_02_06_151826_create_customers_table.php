@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->collation('utf8mb4_slovak_ci');
-            $table->string('ico_customers', 20)->collation('utf8mb4_slovak_ci');
-            $table->string('dic_customers', 20)->collation('utf8mb4_slovak_ci');
-            $table->text('street')->collation('utf8mb4_slovak_ci');
-            $table->string('postal_code')->collation('utf8mb4_slovak_ci');
-            $table->string('city')->collation('utf8mb4_slovak_ci');
-            $table->string('country')->collation('utf8mb4_slovak_ci');
+            $table->string('name');
+            $table->string('ico_customers', 20);
+            $table->string('dic_customers', 20);
+            $table->text('street');
+            $table->string('postal_code');
+            $table->string('city');
+            $table->string('country');
             $table->timestamps();
         });
     }

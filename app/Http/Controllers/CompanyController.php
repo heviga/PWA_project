@@ -1,76 +1,145 @@
 <?php
-namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
+/* use App\Http\Controllers\Auth\Request; */
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // Import Auth
 
-class CompanyController extends Controller {
-    public function index() {
+
+class CompanyController extends Controller
+{
+    /**
+     * Display a list of companies.
+     */
+    public function index()
+    {
         $companies = Company::all();
         return view('companies.index', compact('companies'));
     }
 
-    public function create() {
+    /**
+     * Show the form for creating a new company.
+     */
+    public function create()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to add a company.');
+        }
+
         return view('companies.create');
     }
-    // Show company details and invoices
+
+    /**
+     * Store a newly created company in the database.
+     */
+    public function store(Request $request)
+    {
+        \Log::info('Company Data Received:', $request->all());
+    
+        // Validate all fields (only phone is nullable)
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:as,sro,szčo',
+            'ico_companies' => 'required|string|max:20|unique:companies,ico_companies',
+            'dic_companies' => 'required|string|max:20',
+            'email' => 'required|email|unique:companies,email',
+            'bank_name' => 'required|string|max:255',
+            'swift' => 'required|string|max:20',
+            'iban' => 'required|string|max:50',
+            'account_number' => 'required|string|max:20',
+            'bank_code' => 'required|string|max:20',
+            'street' => 'required|string',
+            'postal_code' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20', // ✅ Only phone is nullable
+        ]);
+    
+        // ✅ Automatically assign the user_id
+        $validatedData['user_id'] = Auth::id();
+    
+        try {
+            // ✅ Save the company
+            Company::create($validatedData);
+    
+            return redirect()->route('companies.index')->with('success', 'Company created successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to create company: ' . $e->getMessage()]);
+        }
+    }
+    
+
+    /**
+     * Display the specified company details.
+     */
     public function show(Company $company)
     {
         return view('companies.show', compact('company'));
     }
 
-    public function store(Request $request) {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|in:as,sro,szčo',
-            'ico_companies' => 'required|string|max:20|unique:companies,ico_companies',
-            'dic_companies' => 'nullable|string|max:20',
-            'email' => 'required|email|unique:companies,email',
-            'bank_name' => 'nullable|string|max:255',
-            'swift' => 'nullable|string|max:20',
-            'iban' => 'nullable|string|max:50',
-            'account_number' => 'nullable|string|max:20',
-            'bank_code' => 'nullable|string|max:20',
-            'street' => 'nullable|string',
-            'postal_code' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
-            'user_id' => 'required|exists:users,id',
-        ]);
+    /**
+     * Show the form for editing a company.
+     */
+    public function edit(Company $company)
+    {
+        if (Auth::id() !== $company->user_id) {
+            return redirect()->route('companies.index')->with('error', 'Unauthorized access.');
+        }
 
-        Company::create($validatedData);
-        return redirect()->route('companies.index')->with('success', 'Company created successfully.');
-    }
-
-    public function edit(Company $company) {
         return view('companies.edit', compact('company'));
     }
 
-    public function update(Request $request, Company $company) {
+    /**
+     * Update the company in the database.
+     */
+    public function update(Request $request, Company $company)
+    {
+        if (Auth::id() !== $company->user_id) {
+            return redirect()->route('companies.index')->with('error', 'Unauthorized access.');
+        }
+    
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:as,sro,szčo',
             'ico_companies' => 'required|string|max:20|unique:companies,ico_companies,' . $company->id,
-            'dic_companies' => 'nullable|string|max:20',
+            'dic_companies' => 'required|string|max:20',
             'email' => 'required|email|unique:companies,email,' . $company->id,
-            'bank_name' => 'nullable|string|max:255',
-            'swift' => 'nullable|string|max:20',
-            'iban' => 'nullable|string|max:50',
-            'account_number' => 'nullable|string|max:20',
-            'bank_code' => 'nullable|string|max:20',
-            'street' => 'nullable|string',
-            'postal_code' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
-            'user_id' => 'required|exists:users,id',
+            'bank_name' => 'required|string|max:255',
+            'swift' => 'required|string|max:20',
+            'iban' => 'required|string|max:50',
+            'account_number' => 'required|string|max:20',
+            'bank_code' => 'required|string|max:20',
+            'street' => 'required|string',
+            'postal_code' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20', //  Only phone is nullable
         ]);
-
-        $company->update($validatedData);
-        return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
+    
+        try {
+            $company->update($validatedData);
+            return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to update company: ' . $e->getMessage()]);
+        }
     }
+    
 
-    public function destroy(Company $company) {
-        $company->delete();
-        return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
+    /**
+     * Delete a company.
+     */
+    public function destroy(Company $company)
+    {
+        if (Auth::id() !== $company->user_id) {
+            return redirect()->route('companies.index')->with('error', 'Unauthorized access.');
+        }
+
+        try {
+            $company->delete();
+            return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete company: ' . $e->getMessage()]);
+        }
     }
 }
