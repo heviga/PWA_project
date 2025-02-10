@@ -54,19 +54,19 @@
                 <!-- Issue Date -->
                 <div class="mb-3">
                     <label for="issue_date" class="form-label">Issue Date</label>
-                    <input type="date" class="form-control" id="issue_date" name="issue_date" value="{{ old('issue_date', $invoice->issue_date->format('Y-m-d')) }}" required>
+                    <input type="date" class="form-control" id="issue_date" name="issue_date" value="{{ old('issue_date', \Carbon\Carbon::parse($invoice->issue_date)->format('Y-m-d')) }}" required>
                 </div>
 
                 <!-- Due Date -->
                 <div class="mb-3">
                     <label for="due_date" class="form-label">Due Date</label>
-                    <input type="date" class="form-control" id="due_date" name="due_date" value="{{ old('due_date', $invoice->due_date->format('Y-m-d')) }}" required>
+                    <input type="date" class="form-control" id="due_date" name="due_date" value="{{ old('due_date', \Carbon\Carbon::parse($invoice->due_date)->format('Y-m-d')) }}" required>
                 </div>
 
                 <!-- Delivery Date -->
                 <div class="mb-3">
                     <label for="delivery_date" class="form-label">Delivery Date</label>
-                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="{{ old('delivery_date', $invoice->delivery_date->format('Y-m-d')) }}" required>
+                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="{{ old('delivery_date', \Carbon\Carbon::parse($invoice->delivery_date)->format('Y-m-d')) }}" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Update Invoice</button>
