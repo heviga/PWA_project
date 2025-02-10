@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('invoice_id');
-            $table->string('item_name')->collation('utf8mb4_slovak_ci');
-            $table->integer('quantity')->collation('utf8mb4_slovak_ci');
-            $table->decimal('unit_price', 10, 2)->collation('utf8mb4_slovak_ci');//bez dph
+            $table->string('item_name');
+            $table->integer('quantity');
+            $table->decimal('unit_price', 10, 2);//bez dph
             $table->timestamps();
 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');

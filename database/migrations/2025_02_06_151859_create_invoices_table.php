@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('customer_id');
-            $table->decimal('total_amount', 10, 2)->collation('utf8mb4_slovak_ci');
-            $table->enum('payment_method', ['prevodom', 'kartou', 'hotovost'])->collation('utf8mb4_slovak_ci');
-            $table->date('issue_date')->default(now())->collation('utf8mb4_slovak_ci');
-            $table->date('due_date')->default(now()->addDays(14))->collation('utf8mb4_slovak_ci');
-            $table->date('delivery_date')->default(now())->collation('utf8mb4_slovak_ci');
+            $table->decimal('total_amount', 10, 2);
+            $table->enum('payment_method', ['prevodom', 'kartou', 'hotovost']);
+            $table->date('issue_date')->default(now());
+            $table->date('due_date')->default(now()->addDays(14));
+            $table->date('delivery_date')->default(now());
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');

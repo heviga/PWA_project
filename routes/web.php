@@ -5,7 +5,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\Auth\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
