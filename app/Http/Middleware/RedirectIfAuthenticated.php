@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Middleware;
-use Illuminate\Http\Request;
+
+use Illuminate\Http\Request; //noooo
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-
 
 class RedirectIfAuthenticated
 {
