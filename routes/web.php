@@ -45,23 +45,27 @@ Route::middleware(['auth'])->group(function () {
 
 // Company-related routes
 Route::middleware('auth')->group(function () {
-    Route::get('/companies/{company}/export-pdf', [CompanyController::class, 'exportPDF'])->name('companies.export-pdf');
-    Route::resource('companies', CompanyController::class);
-    Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
     Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create'); 
     Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store'); 
-    Route::get('/companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
+    Route::resource('companies', CompanyController::class);
+
 });
+//neprihlaseni
+Route::get('/companies/{company}/export-pdf', [CompanyController::class, 'exportPDF'])->name('companies.export-pdf');
+Route::get('/companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
+Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index');
+
 
 // Invoice-related routes
 Route::middleware('auth')->group(function () {
-    Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'generateInvoicePdf'])->name('invoices.pdf');
-    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
     Route::delete('invoices/{invoice}/destroy', [InvoiceController::class, 'destroy'])->name('invoices.delete');
     Route::delete('invoices/{invoice}/forceDelete', [InvoiceController::class, 'forceDelete'])->name('invoices.forceDelete');
     Route::resource('invoices', InvoiceController::class);
-});
 
+});
+Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');//aj pre neprihlasenych
+Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'generateInvoicePdf'])->name('invoices.pdf');
+Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
 
 // Customer-related routes
 Route::middleware('auth')->group(function () {
