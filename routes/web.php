@@ -1,14 +1,15 @@
 <?php
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController; // Missing AdminController Import
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
-
 
 // Authentication routes
 Auth::routes();
@@ -18,11 +19,15 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-// Dashboard route (authenticated users only)
+// Dashboard routes for users and admins
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+        return view('dashboard'); 
+    })->name('dashboard'); // 
+    // Admin Dashboard
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])
+        ->middleware('auth')
+        ->name('admin.dashboard');
 });
 
 // Profile routes for logged-in users
@@ -52,10 +57,11 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'generateInvoicePdf'])->name('invoices.pdf');
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
-    Route::post('invoices/{invoice}/delete', [InvoiceController::class, 'delete'])->name('invoices.delete');
+    Route::delete('invoices/{invoice}/destroy', [InvoiceController::class, 'destroy'])->name('invoices.delete');
     Route::delete('invoices/{invoice}/forceDelete', [InvoiceController::class, 'forceDelete'])->name('invoices.forceDelete');
     Route::resource('invoices', InvoiceController::class);
 });
+
 
 // Customer-related routes
 Route::middleware('auth')->group(function () {
@@ -64,10 +70,7 @@ Route::middleware('auth')->group(function () {
 
 // Home route after login
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Login Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-
-//admin
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-});

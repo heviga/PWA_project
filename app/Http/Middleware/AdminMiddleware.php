@@ -6,15 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Client;
 
+
 class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check() || Auth::user()->is_admin !== 1) {
-            return redirect('/')->with('error', 'Unauthorized access.');
+        if (!Auth::check() || !Auth::user()->is_admin) {
+            return redirect('/home'); // Redirect non-admin users
         }
 
         return $next($request);
     }
 }
-
