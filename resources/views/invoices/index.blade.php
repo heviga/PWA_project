@@ -45,6 +45,8 @@
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                         </form>
+                                        <!-- Generate PDF -->
+                                        <a href="{{ route('invoices.pdf', $invoice->id) }}" class="btn btn-sm btn-info">Download PDF</a>
                                     </td>
                                 </tr>
                             @endforeach

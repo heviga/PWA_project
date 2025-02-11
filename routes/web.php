@@ -49,10 +49,10 @@ Route::middleware('auth')->group(function () {
 
 // Invoice-related routes
 Route::middleware('auth')->group(function () {
-    Route::get('/companies/{company}/invoices/pdf', [InvoiceController::class, 'generatePdf'])->name('invoices.pdf');
-    Route::resource('invoices', InvoiceController::class);
+    Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'generateInvoicePdf'])->name('invoices.pdf');
     Route::post('invoices/{invoice}/delete', [InvoiceController::class, 'delete'])->name('invoices.delete');
     Route::delete('invoices/{invoice}/forceDelete', [InvoiceController::class, 'forceDelete'])->name('invoices.forceDelete');
+    Route::resource('invoices', InvoiceController::class);
 });
 
 // Customer-related routes

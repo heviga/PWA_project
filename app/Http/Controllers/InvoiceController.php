@@ -87,22 +87,14 @@ class InvoiceController extends Controller {
         return redirect()->route('invoices.index')->with('success', 'Invoice permanently deleted.');
     }
 
-    public function generateAllInvoicesPdf(Company $company)
-    {
-        // Získame všetky faktúry firmy
-        $invoices = $company->invoices->sortBy('issue_date'); // Zoradenie podľa dátumu vystavenia faktúry
+    public function generateInvoicePdf(Invoice $invoice)
+{
+    $company = $invoice->company;
+    $customer = $invoice->customer;
 
-        // Rozdelenie faktúr po rokoch
-        $invoicesByYear = [];
-        foreach ($invoices as $invoice) {
-            $year = $invoice->issue_date->year;
-            $invoicesByYear[$year][] = $invoice;
-        }
+    $pdf = PDF::loadView('invoices.single_invoice_pdf', compact('invoice', 'company', 'customer'));
 
-        // Generovanie PDF
-        $pdf = PDF::loadView('invoices.yearly_invoices_pdf', compact('company', 'invoicesByYear'));
+    return $pdf->download('invoice_' . $invoice->invoice_number . '.pdf');
+}
 
-        // Stiahnutie PDF
-        return $pdf->download('invoices_' . $company->name . '.pdf');
-    }
 }
