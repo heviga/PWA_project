@@ -74,6 +74,9 @@ Route::middleware('auth')->group(function () {
 
 // Home route after login
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', function () {
+    return view('dashboard'); 
+})->name('dashboard');//logout
 
 // Login Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

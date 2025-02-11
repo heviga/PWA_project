@@ -6,9 +6,9 @@ use App\Models\Company;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Import Auth
-use Barryvdh\DomPDF\Facade as PDF;
+use PDF;
 use Carbon\Carbon;
-
+/* use Barryvdh\DomPDF\Facade\Pdf; */
 class CompanyController extends Controller
 {
     /**
@@ -146,22 +146,21 @@ class CompanyController extends Controller
     }
     
     public function exportPDF($companyId)
-    {
-        // Získame všetky faktúry pre danú firmu
-        $invoices = Invoice::where('company_id', $companyId)->get();
+{
+    $company = Company::findOrFail($companyId);
 
-        // Nájdeme firmu podľa ID
-        $company = Company::find($companyId);
+    // Group invoices by year
+    $invoicesByYear = Invoice::where('company_id', $companyId)
+        ->orderBy('issue_date')
+        ->get()
+        ->groupBy(function ($invoice) {
+            return \Carbon\Carbon::parse($invoice->issue_date)->format('Y');
+        });
 
-        // Príprava dát pre PDF
-        $array = ['title' => 'invoices.list_of_invoices'];
-        $data = compact('invoices', 'company', 'array');
+    // Generate PDF
+    $pdf = PDF::loadView('companies.invoices_pdf', compact('company', 'invoicesByYear'));
 
-        // Generovanie PDF
-        $pdf = PDF::loadView('pdfs.invoice', $data);
-
-        // Generovanie a streamovanie PDF
-        return $pdf->stream('invoices_'.$company->name.'.pdf');
-    }
+    return $pdf->download('invoices_' . $company->name . '.pdf');
+}
 
 }

@@ -48,7 +48,7 @@
                                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                     </form>
 
-                                    <!-- Generate PDF -->
+                                    <a href="{{ route('companies.export-pdf', $company->id) }}" class="btn btn-sm btn-success">PDF</a>
                                     
                                 </td>
                             </tr>

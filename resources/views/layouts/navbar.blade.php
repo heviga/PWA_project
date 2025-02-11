@@ -17,19 +17,22 @@
                         <li><a class="dropdown-item" href="{{ route('companies.index') }}">Companies</a></li>
                         <li><a class="dropdown-item" href="{{ route('invoices.index') }}">Invoices</a></li>
                         <li><a class="dropdown-item" href="{{ route('customers.index') }}">Customers</a></li>
-                        
-                        @guest
-                            <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
-                            <li><a class="dropdown-item" href="{{ route('register') }}">Register</a></li>
-                        @else
+
+                        @auth
+                            @if(auth()->user()->is_admin) 
+                                <li><a class="dropdown-item text-danger fw-bold" href="{{ route('admin.dashboard') }}">Admin Panel</a></li>
+                            @endif
+
                             <li>
-                                <!-- Logout Form (Fixes the GET logout issue) -->
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="dropdown-item">Logout</button>
                                 </form>
                             </li>
-                        @endguest
+                        @else
+                            <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
+                            <li><a class="dropdown-item" href="{{ route('register') }}">Register</a></li>
+                        @endauth
                     </ul>
                 </li>
             </ul>
