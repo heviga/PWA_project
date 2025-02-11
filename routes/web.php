@@ -63,3 +63,8 @@ Route::middleware('auth')->group(function () {
 
 // Home route after login
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//admin
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+});
