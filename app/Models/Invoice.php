@@ -32,4 +32,10 @@ class Invoice extends Model {
     public function invoiceItems() {
         return $this->hasMany(InvoiceItem::class);
     }
+
+    // Týmto sa zabezpečí, že invoice_number bude načítané, aj keď nie je v $fillable
+    public function getInvoiceNumberAttribute($value) {
+        return $value; // Vracia hodnotu z databázy bez ďalších úprav
+    }
+    
 }

@@ -48,8 +48,8 @@
                                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                     </form>
 
-                                    <!-- Tlačidlo pre stiahnutie PDF -->
-                                    <a href="{{ route('companies.export-pdf', $company->id) }}" class="btn btn-primary" target="_blank">
+                                    <!-- Generate PDF -->
+                                    
                                 </td>
                             </tr>
                         @endforeach

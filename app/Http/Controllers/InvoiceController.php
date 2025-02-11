@@ -12,6 +12,9 @@ class InvoiceController extends Controller {
     public function index()
 {
     $companies = Company::with('invoices.customer')->get();
+
+    
+
     return view('invoices.index', compact('companies'));
 }
 
@@ -95,6 +98,12 @@ class InvoiceController extends Controller {
     $pdf = PDF::loadView('invoices.single_invoice_pdf', compact('invoice', 'company', 'customer'));
 
     return $pdf->download('invoice_' . $invoice->invoice_number . '.pdf');
+}
+
+public function show(Invoice $invoice)
+{
+    $invoice->load('customer'); // Načítanie zákazníka spolu s faktúrou
+    return response()->json($invoice);
 }
 
 }

@@ -11,11 +11,6 @@
                 <div class="card-body">
                     <h4>{{ $company->name }}</h4>
 
-                    <!-- Button to Add New Invoice -->
-                    <a href="{{ route('invoices.create', ['company_id' => $company->id]) }}" class="btn btn-success mb-3">
-                        Add New Invoice
-                    </a>
-
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -29,7 +24,7 @@
                         </thead>
                         <tbody>
                             @foreach ($company->invoices as $invoice)
-                                <tr>
+                                <tr class="clickable-row" data-invoice-id="{{ $invoice->id }}">
                                     <td>{{ $invoice->invoice_number }}</td>
                                     <td>{{ $invoice->customer->name }}</td>
                                     <td>{{ $invoice->total_amount }}</td>
@@ -45,8 +40,9 @@
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                         </form>
+
                                         <!-- Generate PDF -->
-                                        <a href="{{ route('invoices.pdf', $invoice->id) }}" class="btn btn-sm btn-info">Download PDF</a>
+                                        <a href="{{ route('invoices.pdf', $invoice->id) }}" class="btn btn-sm btn-secondary">PDF</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -56,4 +52,49 @@
             </div>
         @endforeach
     </div>
+
+    <!-- Modal for Invoice Details -->
+    <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceModalLabel">Invoice Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Invoice No:</strong> <span id="modalInvoiceNumber"></span></p>
+                    <p><strong>Customer:</strong> <span id="modalCustomerName"></span></p>
+                    <p><strong>Total Amount:</strong> $<span id="modalTotalAmount"></span></p>
+                    <p><strong>Issue Date:</strong> <span id="modalIssueDate"></span></p>
+                    <p><strong>Due Date:</strong> <span id="modalDueDate"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.clickable-row').forEach(function (row) {
+                row.addEventListener('click', function () {
+                    const invoiceId = this.dataset.invoiceId;
+                    
+                    // Fetch the invoice details
+                    fetch(`/invoices/${invoiceId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Populate modal with data
+                            document.getElementById('modalInvoiceNumber').textContent = data.invoice_number;
+                            document.getElementById('modalCustomerName').textContent = data.customer.name;
+                            document.getElementById('modalTotalAmount').textContent = data.total_amount;
+                            document.getElementById('modalIssueDate').textContent = data.issue_date;
+                            document.getElementById('modalDueDate').textContent = data.due_date;
+
+                            // Show the modal
+                            new bootstrap.Modal(document.getElementById('invoiceModal')).show();
+                        })
+                        .catch(error => console.error('Error fetching invoice details:', error));
+                });
+            });
+        });
+    </script>
 @endsection
