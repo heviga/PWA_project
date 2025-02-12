@@ -5,6 +5,14 @@
 @section('content')
     <div class="container mt-4">
         <h1 class="text-center mb-4">Invoices by Company</h1>
+<!-- viditelne pre vsetkych -->
+        <div class="d-flex justify-content-end mb-3">
+        @if(auth()->check()) 
+            <a href="{{ route('invoices.create') }}" class="btn btn-success">Create New Invoice</a>
+        @else
+            <a href="{{ route('login') }}" class="btn btn-secondary disabled">Log in to Create Invoice</a>
+        @endif
+    </div>
 
         @foreach ($companies as $company)
             <div class="card shadow mb-4">
