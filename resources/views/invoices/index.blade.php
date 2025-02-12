@@ -10,7 +10,7 @@
         @if(auth()->check()) 
             <a href="{{ route('invoices.create') }}" class="btn btn-success">Create New Invoice</a>
         @else
-            <a href="{{ route('login') }}" class="btn btn-secondary disabled">Log in to Create Invoice</a>
+        <a href="{{ route('login') }}" class="btn btn-secondary">Log in to Create Invoice</a>
         @endif
     </div>
 

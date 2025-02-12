@@ -118,34 +118,27 @@ public function show(Invoice $invoice)
 }
 
 public function downloadZip()
-{
-    $lastYear = Carbon::now()->subYear()->year;
-    
-    // Fetch 
-    $invoices = Invoice::whereYear('issue_date', $lastYear)->get();
+    {
+        $zipFileName = 'invoices_last_year.zip';
+        $zipPath = storage_path("app/public/$zipFileName");
 
-    if ($invoices->isEmpty()) {
-        return back()->with('error', 'No invoices found for the last year.');
-    }
+        $zip = new ZipArchive;
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            // Get all invoice files
+            $files = Storage::files('public/invoices');
 
-    $zipFileName = "invoices_$lastYear.zip";
-    $zipFilePath = storage_path("app/public/$zipFileName");
-
-    $zip = new ZipArchive;
-    if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
-        foreach ($invoices as $invoice) {
-            $pdfPath = storage_path("app/public/invoices/invoice_{$invoice->id}.pdf");
-            if (file_exists($pdfPath)) {
-                $zip->addFile($pdfPath, "invoice_{$invoice->id}.pdf");
+            foreach ($files as $file) {
+                $filePath = storage_path("app/" . $file);
+                $fileName = basename($file);
+                $zip->addFile($filePath, $fileName);
             }
+
+            $zip->close();
+        } else {
+            return back()->withErrors(['error' => 'Failed to create ZIP file']);
         }
-        $zip->close();
-    } else {
-        return back()->with('error', 'Failed to create ZIP file.');
+
+        return response()->download($zipPath)->deleteFileAfterSend(true);
     }
-
-    return response()->download($zipFilePath)->deleteFileAfterSend(true);
-}
-
 
 }
