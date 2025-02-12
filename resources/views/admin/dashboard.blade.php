@@ -68,6 +68,7 @@ admin@admin.com
 password:
 adminpassword
 
+vytvor admina
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
