@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Invoice {{ $invoice->invoice_number }}</title>
+    <title>Invoice {{ $invoice->id }}</title>
     <style>
         body { font-family: Arial, sans-serif; }
         .container { padding: 20px; }
@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Invoice {{ $invoice->invoice_number }}</h1>
+        <h1>Invoice {{ $invoice->id }}</h1>
 
         <p><strong>Company:</strong> {{ $company->name }}</p>
         <p><strong>Customer:</strong> {{ $customer->name }}</p>

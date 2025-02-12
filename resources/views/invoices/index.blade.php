@@ -33,7 +33,7 @@
                         <tbody>
                             @foreach ($company->invoices as $invoice)
                                 <tr class="clickable-row" data-invoice-id="{{ $invoice->id }}">
-                                    <td>{{ $invoice->invoice_number }}</td>
+                                    <td>{{ $invoice->id }}</td>
                                     <td>{{ $invoice->customer->name }}</td>
                                     <td>{{ $invoice->total_amount }}</td>
                                     <td>{{ $invoice->issue_date }}</td>
@@ -64,7 +64,7 @@
     <a href="{{ route('invoices.downloadZip') }}" class="btn btn-lg btn-info">
         Download All Invoices (Last Year)
     </a>
-</div>
+<!-- </div> -->
 
 
     <!-- Modal for Invoice Details -->
@@ -97,7 +97,7 @@
                         .then(response => response.json())
                         .then(data => {
                             // Populate modal with data
-                            document.getElementById('modalInvoiceNumber').textContent = data.invoice_number;
+                            document.getElementById('modalInvoiceNumber').textContent = data.id;
                             document.getElementById('modalCustomerName').textContent = data.customer.name;
                             document.getElementById('modalTotalAmount').textContent = data.total_amount;
                             document.getElementById('modalIssueDate').textContent = data.issue_date;

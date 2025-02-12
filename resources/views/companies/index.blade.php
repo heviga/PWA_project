@@ -40,15 +40,15 @@
                                 <td>{{ $company->ico_companies }}</td>
                                 <td>{{ $company->email }}</td>
                                 <td>
-                                    <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                    <!-- <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-sm btn-primary">Edit</a>
 
                                     <form method="POST" action="{{ route('companies.destroy', $company->id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this company?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                    </form>
+                                    </form> -->
 
-                                    <a href="{{ route('companies.export-pdf', $company->id) }}" class="btn btn-sm btn-success">PDF</a>
+                                    <a href="{{ route('companies.export-pdf', $company->id) }}" class="btn btn-sm btn-primary">PDF</a>
                                     
                                 </td>
                             </tr>
