@@ -67,4 +67,19 @@ email:
 admin@admin.com
 password:
 adminpassword
+
+
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+User::create([
+    'first_name' => 'Admin',
+    'last_name' => 'User',
+    'email' => 'admin@admin.com',
+    'password' => Hash::make('adminpassword'), // Securely hash the password
+    'phone' => '123456789', // Optional
+    'is_admin' => 1, // Ensure this column exists in your database
+]);
+
+
 -->
