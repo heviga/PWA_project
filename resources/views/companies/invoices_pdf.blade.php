@@ -29,7 +29,7 @@
                 @php $yearTotal = 0; @endphp
                 @foreach($invoices as $invoice)
                     <tr>
-                        <td>{{ $invoice->invoice_number }}</td>
+                        <td>{{ $invoice->id }}</td>
                         <td>€{{ number_format($invoice->total_amount, 2) }}</td>
                     </tr>
                     @php $yearTotal += $invoice->total_amount; @endphp

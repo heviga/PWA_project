@@ -69,6 +69,7 @@ password:
 adminpassword
 
 vytvor admina
+php artisan db:seed
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
