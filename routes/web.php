@@ -70,6 +70,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');//aj pre neprihlasenych
 Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'generateInvoicePdf'])->name('invoices.pdf');
 Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
+Route::get('/invoices/download-zip', [InvoiceController::class, 'downloadZip'])->name('invoices.downloadZip');
+
 
 // Customer-related routes
 Route::middleware('auth')->group(function () {

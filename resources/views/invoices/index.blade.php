@@ -60,6 +60,12 @@
             </div>
         @endforeach
     </div>
+    <div class="text-center mt-4">
+    <a href="{{ route('invoices.downloadZip') }}" class="btn btn-lg btn-info">
+        Download All Invoices (Last Year)
+    </a>
+</div>
+
 
     <!-- Modal for Invoice Details -->
     <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">

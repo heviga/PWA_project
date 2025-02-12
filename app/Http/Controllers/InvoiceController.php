@@ -6,7 +6,10 @@ use App\Models\Invoice;
 use App\Models\Company;
 use App\Models\Customer;
 use PDF;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class InvoiceController extends Controller {
     public function index()
@@ -53,6 +56,8 @@ class InvoiceController extends Controller {
         foreach ($validatedData['invoice_items'] as $itemData) {
             $invoice->invoiceItems()->create($itemData);
         }
+        $this->generateInvoicePdf($invoice);
+
     
         return redirect()->route('invoices.index')->with('success', 'Invoice created successfully.');
     }
@@ -97,13 +102,50 @@ class InvoiceController extends Controller {
 
     $pdf = PDF::loadView('invoices.single_invoice_pdf', compact('invoice', 'company', 'customer'));
 
-    return $pdf->download('invoice_' . $invoice->invoice_number . '.pdf');
-}
+    $filePath = "public/invoices/invoice_{$invoice->id}.pdf";
+
+    // Store the PDF in storage/app/public/invoices/
+    Storage::put($filePath, $pdf->output());
+    return response()->download(storage_path("app/{$filePath}"));
+
+/*     return $pdf->download('invoice_' . $invoice->invoice_number . '.pdf');
+ */}
 
 public function show(Invoice $invoice)
 {
     $invoice->load('customer'); // Načítanie zákazníka spolu s faktúrou
     return response()->json($invoice);
 }
+
+public function downloadZip()
+{
+    $lastYear = Carbon::now()->subYear()->year;
+    
+    // Fetch 
+    $invoices = Invoice::whereYear('issue_date', $lastYear)->get();
+
+    if ($invoices->isEmpty()) {
+        return back()->with('error', 'No invoices found for the last year.');
+    }
+
+    $zipFileName = "invoices_$lastYear.zip";
+    $zipFilePath = storage_path("app/public/$zipFileName");
+
+    $zip = new ZipArchive;
+    if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
+        foreach ($invoices as $invoice) {
+            $pdfPath = storage_path("app/public/invoices/invoice_{$invoice->id}.pdf");
+            if (file_exists($pdfPath)) {
+                $zip->addFile($pdfPath, "invoice_{$invoice->id}.pdf");
+            }
+        }
+        $zip->close();
+    } else {
+        return back()->with('error', 'Failed to create ZIP file.');
+    }
+
+    return response()->download($zipFilePath)->deleteFileAfterSend(true);
+}
+
 
 }
